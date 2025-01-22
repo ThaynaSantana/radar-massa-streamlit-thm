@@ -2,3 +2,4 @@ data/
 cache/
 pandasai.log
 __pycache__
+.venv/
