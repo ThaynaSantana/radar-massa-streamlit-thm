@@ -2,6 +2,7 @@ import os
 import time
 import streamlit as st
 import pandas as pd
+import pandas.core.arrays
 from pandasai import SmartDataframe
 from pandasai.llm import OpenAI
 from pandasai.responses.response_parser import ResponseParser
@@ -22,24 +23,23 @@ class StreamlitResponse(ResponseParser):
         st.write(result["value"])
         return
 
+st.header('THM Estatistica e Paulo Massini', divider="green")
 
+main = st.container()
 # Title
-st.title("🤖BotPalmeiras Dataset🟢⚽")
+main.title("📟Radar Massa - A IA Verde")
 # Uploud File
-uplouded_file = st.sidebar.file_uploader("📂 Upload de Arquivo CSV", type="csv")
-# Navigation pages
-pg = st.navigation({
-    "Sua Conta": [log_out, settings],
-})
-pg.run()
+uplouded_file = st.sidebar.file_uploader("📂 Carregue aqui seus dados", type="csv")
 
 # Dashboard
 st.sidebar.title("Dashboard")
-st.sidebar.button("📊 Análise de Dados")
-st.sidebar.button("📈 Visualização de Dados")
-st.sidebar.button("🔍 Pesquisa de Dados")
+st.sidebar.button("🔍 Notícias Recentes", use_container_width=True)
+st.sidebar.button("📊 Análise de Desempenho", use_container_width=True)
+st.sidebar.button("📟 Radar Massa - A IA Verde", use_container_width=True)
+st.sidebar.button("📈 Tire suas próprias Conclusões!", use_container_width=True)
+st.sidebar.button("🗓️ Calendário de Jogos", use_container_width=True)
 
-st.toast("🤖 Bem-vindo ao BotPalmeiras Dataset!")
+st.toast("🤖 Bem-vindo ao 📟Radar Massa!")
 
 if uplouded_file:
     # Carregando os dados
@@ -71,7 +71,8 @@ if uplouded_file:
             },
         )
 
-        answer = query_engine.chat(query, )
+        answer = query_engine.chat(query)
+        # Resposta Texto
         st.write(answer)
 else:
     st.info("Anexe um arquivo CSV para começar")
