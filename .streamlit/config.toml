@@ -3,9 +3,3 @@ primaryColor="#1fff31"
 backgroundColor="#2e3943"
 secondaryBackgroundColor="#3b5241"
 textColor="#f8f8ff"
-
-[runner]
-fastReruns = true
-
-[server]
-port = 3001
