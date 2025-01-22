@@ -1,22 +1,10 @@
 import os
-
+import time
 import streamlit as st
+import pandas as pd
 from pandasai import SmartDataframe
-from pandasai.callbacks import BaseCallback
 from pandasai.llm import OpenAI
 from pandasai.responses.response_parser import ResponseParser
-
-from data import load_data
-
-
-class StreamlitCallback(BaseCallback):
-    def __init__(self, container) -> None:
-        """Initialize callback handler."""
-        self.container = container
-
-    def on_code(self, response: str):
-        self.container.code(response)
-
 
 class StreamlitResponse(ResponseParser):
     def __init__(self, context) -> None:
@@ -35,25 +23,55 @@ class StreamlitResponse(ResponseParser):
         return
 
 
-st.write("# Chat with Credit Card Fraud Dataset 🦙")
+# Title
+st.title("🤖BotPalmeiras Dataset🟢⚽")
+# Uploud File
+uplouded_file = st.sidebar.file_uploader("📂 Upload de Arquivo CSV", type="csv")
+# Navigation pages
+pg = st.navigation({
+    "Sua Conta": [log_out, settings],
+})
+pg.run()
 
-df = load_data("./data")
+# Dashboard
+st.sidebar.title("Dashboard")
+st.sidebar.button("📊 Análise de Dados")
+st.sidebar.button("📈 Visualização de Dados")
+st.sidebar.button("🔍 Pesquisa de Dados")
 
-with st.expander("🔎 Dataframe Preview"):
-    st.write(df.tail(3))
+st.toast("🤖 Bem-vindo ao BotPalmeiras Dataset!")
 
-query = st.text_area("🗣️ Chat with Dataframe")
-container = st.container()
+if uplouded_file:
+    # Carregando os dados
+    progress_text = "Carregando dados... Por favor aguarde."
+    my_bar = st.progress(0, text=progress_text)
 
-if query:
-    llm = OpenAI(api_token=os.environ["OPENAI_API_KEY"])
-    query_engine = SmartDataframe(
-        df,
-        config={
-            "llm": llm,
-            "response_parser": StreamlitResponse,
-            "callback": StreamlitCallback(container),
-        },
-    )
+    for percent_complete in range(100):
+        my_bar.progress(percent_complete + 1, text=progress_text)
+        time.sleep(0.01)
+    time.sleep(1)
+    my_bar.empty()
+    df = pd.read_csv(uplouded_file)
 
-    answer = query_engine.chat(query)
+    with st.expander("🔎 Dataframe Preview"):
+        st.write(df.head(5))
+
+    query = st.text_area("🗣️ Digite sua pergunta...")
+    container = st.container()
+
+    if query:
+        st.toast("🤖Estou pensando e analisando..")
+        llm = OpenAI(api_token=os.environ["OPENAI_API_KEY"],)
+        query_engine = SmartDataframe(
+            df,
+            config={
+                "llm": llm,
+                "response_parser": StreamlitResponse,
+                
+            },
+        )
+
+        answer = query_engine.chat(query, )
+        st.write(answer)
+else:
+    st.info("Anexe um arquivo CSV para começar")

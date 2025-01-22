@@ -1,0 +1,8 @@
+[theme]
+primaryColor = "#4bf542"
+
+[runner]
+fastReruns = true
+
+[server]
+port = 3001
