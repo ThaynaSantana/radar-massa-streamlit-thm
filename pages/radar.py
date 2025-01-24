@@ -2,10 +2,13 @@ import os
 import time
 import streamlit as st
 import pandas as pd
-import pandas.core.arrays
 from pandasai import SmartDataframe
 from pandasai.llm import OpenAI
 from pandasai.responses.response_parser import ResponseParser
+
+# Configuração Inicial da pagina
+st.set_page_config(page_title="Radar Massa - A IA Verde", page_icon="📟")
+st.logo("https://a.espncdn.com/i/teamlogos/soccer/500/2029.png", size="large")
 
 class StreamlitResponse(ResponseParser):
     def __init__(self, context) -> None:
@@ -23,23 +26,29 @@ class StreamlitResponse(ResponseParser):
         st.write(result["value"])
         return
 
-st.header('THM Estatistica e Paulo Massini', divider="green")
 
-main = st.container()
+col1, col2 = st.columns([1,5])
+
+with col1:
+    st.image(width=100,image="https://a.espncdn.com/i/teamlogos/soccer/500/2029.png")
+
+with col2:
+    st.header('THM Estatistica e Paulo Massini', divider="green")
+
 # Title
-main.title("📟Radar Massa - A IA Verde")
+st.title("📟Radar Massa - A IA Verde")
+
 # Uploud File
-uplouded_file = st.sidebar.file_uploader("📂 Carregue aqui seus dados", type="csv")
+uplouded_file = st.sidebar.file_uploader("📂 Carregue aqui seus dados (Excel ou CSV)", type=['csv', 'xlsx'])
 
-# Dashboard
-st.sidebar.title("Dashboard")
-st.sidebar.button("🔍 Notícias Recentes", use_container_width=True)
-st.sidebar.button("📊 Análise de Desempenho", use_container_width=True)
-st.sidebar.button("📟 Radar Massa - A IA Verde", use_container_width=True)
-st.sidebar.button("📈 Tire suas próprias Conclusões!", use_container_width=True)
-st.sidebar.button("🗓️ Calendário de Jogos", use_container_width=True)
+# Verifica se a chave 'show_toast' já existe no session_state
+if "show_toast" not in st.session_state:
+    st.session_state["show_toast"] = True
 
-st.toast("🤖 Bem-vindo ao 📟Radar Massa!")
+# Exibe o toast apenas se for a primeira inicialização
+if st.session_state["show_toast"]:
+    st.toast("🤖 Bem-vindo ao 📟Radar Massa!")
+    st.session_state["show_toast"] = False  # Evita que o toast seja exibido novamente
 
 if uplouded_file:
     # Carregando os dados
@@ -51,7 +60,12 @@ if uplouded_file:
         time.sleep(0.01)
     time.sleep(1)
     my_bar.empty()
-    df = pd.read_csv(uplouded_file)
+    # Lendo CSV
+    if uplouded_file.type == "text/csv":
+        df = pd.read_csv(uplouded_file)
+    else:
+        df = pd.read_excel(uplouded_file, engine='openpyxl')
+    
 
     with st.expander("🔎 Dataframe Preview"):
         st.write(df.head(5))
@@ -67,7 +81,6 @@ if uplouded_file:
             config={
                 "llm": llm,
                 "response_parser": StreamlitResponse,
-                
             },
         )
 
@@ -75,4 +88,4 @@ if uplouded_file:
         # Resposta Texto
         st.write(answer)
 else:
-    st.info("Anexe um arquivo CSV para começar")
+    st.info("Anexe um arquivo CSV para começar a utilizar a Inteligencia Artificial!")
