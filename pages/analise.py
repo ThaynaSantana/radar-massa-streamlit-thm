@@ -28,6 +28,9 @@ if uplouded_file:
     
     # Graficos
     st.bar_chart(df, x="nome_do_jogador", y="placar_casa", color='#00FFb0')
-    st.line_chart(df, x="passes_totais", y="ano")
+    # Plotly
+    st.plotly_chart()
+    # Plotnine
+    # Em andamento -> plotnine
 else:
     st.info("Carregue uma base de dados para começar sua Analise de Desempenho")

@@ -18,7 +18,7 @@ if "logged_in" not in st.session_state:
 # Pages Dashboard
 jsonDashboard = [
             st.Page("pages/home.py", title="🏠 Home"),
-            st.Page("pages/news.py", title="🔍 Notícias do Dia"),
+            st.Page("pages/news.py", title="📰 Notícias do Dia"),
             st.Page("pages/analise.py", title="📊 Análise de Desempenho"),
             st.Page("pages/radar.py", title="📟 Radar Massa - A IA Verde"),
             #st.Page("conclusoes.py", title="📈 Tire suas próprias Conclusões!"),
