@@ -14,8 +14,8 @@ st.set_page_config(page_title="Notícias do Dia", page_icon="📰", layout="cent
 @st.cache_data
 def request_api():
     load_dotenv()
-    API_KEY = os.getenv("NEWS_API_KEY")
-    url = f"https://newsapi.org/v2/everything?q=palmeiras&apiKey={API_KEY}&language=pt"
+    API_KEY = st.secrets["NEWS_API_KEY"]
+    url = f"https://newsapi.org/v2/everything?q=palmeiras&apiKey={API_KEY}&language=pt&sortBy=publishedAt"
     response = requests.get(url)
     return response 
 
@@ -48,6 +48,8 @@ for noticia in noticias['articles']:
     with st.container():
         # formatação do content
         noticia["content"] = re.sub(r'\[\+\d+ chars\]', '', noticia["content"])
+        if noticia["title"] == None:
+            noticia["title"] = noticia['description'][:44] + "..."
 
         # Formatação da Data de publicacao
         data_publicacao = datetime.strptime(noticia["publishedAt"], "%Y-%m-%dT%H:%M:%SZ")

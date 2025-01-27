@@ -75,7 +75,7 @@ if uplouded_file:
 
     if query:
         st.toast("🤖Estou pensando e analisando..")
-        llm = OpenAI(api_token=os.environ["OPENAI_API_KEY"],)
+        llm = OpenAI(api_token=st.secrets["OPENAI_API_KEY"],)
         query_engine = SmartDataframe(
             df,
             config={
