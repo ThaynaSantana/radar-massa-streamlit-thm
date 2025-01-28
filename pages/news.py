@@ -5,7 +5,6 @@ import requests
 from PIL import Image
 import streamlit as st
 from datetime import datetime
-from dotenv import load_dotenv
 
 # Configuração inicial
 st.set_page_config(page_title="Notícias do Dia", page_icon="📰", layout="centered")
@@ -13,7 +12,6 @@ st.set_page_config(page_title="Notícias do Dia", page_icon="📰", layout="cent
 # Request API de noticia
 @st.cache_data
 def request_api():
-    load_dotenv()
     API_KEY = st.secrets["NEWS_API_KEY"]
     url = f"https://newsapi.org/v2/everything?q=palmeiras&apiKey={API_KEY}&language=pt&sortBy=publishedAt"
     response = requests.get(url)
