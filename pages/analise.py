@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import plotly.express as px
 import time
 
 st.title("📊 Análise de Desempenho")
@@ -29,8 +30,35 @@ if uplouded_file:
     # Graficos
     st.bar_chart(df, x="nome_do_jogador", y="placar_casa", color='#00FFb0')
     # Plotly
-    st.plotly_chart()
-    # Plotnine
-    # Em andamento -> plotnine
+    # Grafico1:
+    fig1 = px.scatter(df, 
+                      x='ano', 
+                      y='gols', 
+                      color='ano', 
+                      title='Distribuição de Gols por Ano',
+                      labels={"ano": "Ano", "gols": "Gols"})
+    st.plotly_chart(fig1)
+    
+    # Gráfico2:
+    fig2 = px.scatter(
+        df,
+        x='passes_totais',
+        y='duelos_ganhos',
+        color='ano',
+        title='Passes precisos vs Duelos ganhos',
+        hover_data=['ano', 'gols']
+    )
+    st.plotly_chart(fig2)
+    
+    # Grafico3:
+    fig3 = px.scatter(
+        df,
+        x='ano',
+        y='assistencias',
+        color='time_alvo',
+        title='Evolução de Assistencias ao Longo do Tempo',
+        labels={"ano": "Ano", "assistencias": "Assistencias"}
+    )
+    st.plotly_chart(fig3)
 else:
     st.info("Carregue uma base de dados para começar sua Analise de Desempenho")
