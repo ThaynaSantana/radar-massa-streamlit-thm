@@ -4,3 +4,4 @@ pandasai.log
 __pycache__
 .venv/
 .steamlit/secrets.toml
+secrets.toml
